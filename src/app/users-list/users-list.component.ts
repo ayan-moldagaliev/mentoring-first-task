@@ -34,10 +34,6 @@ export class UsersListsComponent {
     this.usersService.deleteUser(id);
   }
 
-  public onCreateUser(createdUser: User) {
-    this.usersService.createUser(createdUser);
-  }
-
   private readonly dialog = inject(MatDialog)
 
   openDialog(): void {
@@ -46,7 +42,9 @@ export class UsersListsComponent {
       });
   
       dialogRef.afterClosed().subscribe(result => {
-        this.usersService.createUser(result);
+        if (result) {
+          this.usersService.createUser(result);
+        }
       });
     }
 }

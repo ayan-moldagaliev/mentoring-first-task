@@ -1,16 +1,16 @@
-<div style="padding: 20px;">
+<div class="wrapper">
   <form [formGroup]="form">
-    <p>NAME:</p>
+    <p>Name:</p>
     <input type="text" formControlName="name">
-    <p>USERNAME:</p>
+    <p>Username:</p>
     <input type="text" formControlName="username">
-    <p>EMAIL:</p>
+    <p>Email:</p>
     <input type="email" formControlName="email">
-    <p>COMPANY:</p>
+    <p>Company name:</p>
     <input type="text" formControlName="companyName">
-    <div style="margin-top: 20px;">
-      <button type="button" mat-dialog-close>
-        CANCEL
+    <div class="btns">
+      <button type="button" (click)="cancel()">
+        Cancel
       </button>
       <button
         [disabled]="form.invalid"

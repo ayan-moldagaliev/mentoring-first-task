@@ -27,7 +27,9 @@ export class UserCardComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.editUser.emit(result)
+      if (result) {
+        this.editUser.emit(result)
+      }
     });
   }
 }

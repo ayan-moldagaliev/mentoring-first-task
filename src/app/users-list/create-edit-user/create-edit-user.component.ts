@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, Output } from "@angular/core";
 import { User } from "../../models/user.interface";
-import { MAT_DIALOG_DATA, MatDialogClose } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogClose, MatDialogRef } from "@angular/material/dialog";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 
 @Component({
@@ -13,13 +13,18 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angula
 
 export class CreateEditUserComponent {
   public readonly data = inject(MAT_DIALOG_DATA)
+  private dialogRef = inject(MatDialogRef<CreateEditUserComponent>)
 
   form = new FormGroup({
     name: new FormControl(this.data?.name || '', [Validators.required, Validators.minLength(4)]),
-        username: new FormControl(this.data?.username ||'', [Validators.required, Validators.minLength(4)]),
-        email: new FormControl(this.data?.email || '', [Validators.required, Validators.email, Validators.minLength(4)]),
-        companyName: new FormControl(this.data?.company.name || '', [Validators.required, Validators.minLength(4)]),
+    username: new FormControl(this.data?.username ||'', [Validators.required, Validators.minLength(4)]),
+    email: new FormControl(this.data?.email || '', [Validators.required, Validators.email, Validators.minLength(4)]),
+    companyName: new FormControl(this.data?.company.name || '', [Validators.required, Validators.minLength(4)]),
   })
+
+  cancel() {
+    this.dialogRef.close(null)
+  }
 
   get formWithFields(): User {
     return {
