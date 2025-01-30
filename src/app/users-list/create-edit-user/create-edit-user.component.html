@@ -1,0 +1,23 @@
+<div style="padding: 20px;">
+  <form [formGroup]="form">
+    <p>NAME:</p>
+    <input type="text" formControlName="name">
+    <p>USERNAME:</p>
+    <input type="text" formControlName="username">
+    <p>EMAIL:</p>
+    <input type="email" formControlName="email">
+    <p>COMPANY:</p>
+    <input type="text" formControlName="companyName">
+    <div style="margin-top: 20px;">
+      <button type="button" mat-dialog-close>
+        CANCEL
+      </button>
+      <button
+        [disabled]="form.invalid"
+        [mat-dialog-close]="formWithFields"
+        >
+        {{data ? "Edit" : "Create"}}
+      </button>
+    </div>
+  </form>
+</div>
