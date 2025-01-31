@@ -22,7 +22,7 @@
       </button>
       <button
         [disabled]="form.invalid"
-        [mat-dialog-close]="formWithFields"
+        (click)="save()"
         >
         {{data ? "Edit" : "Create"}}
       </button>

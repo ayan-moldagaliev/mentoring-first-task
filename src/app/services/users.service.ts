@@ -48,7 +48,6 @@ export class UsersService {
     const updatedUsers = this.usersSubject.value.filter(user => user.id !== id);
     this.setUsers(updatedUsers);
 
-    // Если всех пользователей удалили, загрузить заново с сервера
     if (updatedUsers.length === 0) {
       this.loadUsersIfEmpty();
     }
