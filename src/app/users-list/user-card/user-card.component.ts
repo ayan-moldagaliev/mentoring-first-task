@@ -6,21 +6,23 @@ import { CreateEditUserComponent } from "../create-edit-user/create-edit-user.co
 @Component({
   selector: 'app-user-card',
   templateUrl: './user-card.component.html',
-  styleUrl: './user-card.component.scss',
+  styleUrls: ['./user-card.component.scss'],
   standalone: true,
 })
 
 export class UserCardComponent {
   @Input() user: User;
-  @Output() deleteUser = new EventEmitter();
-  @Output() editUser = new EventEmitter();
+  @Output() deleteUser = new EventEmitter<number>();  // Типизация события
+  @Output() editUser = new EventEmitter<User>();  // Типизация события
 
-  public onDeleteUser(id: number) {
-    this.deleteUser.emit(id);
+  readonly dialog = inject(MatDialog);  // Инициализация MatDialog через inject
+
+  // Обработчик для удаления пользователя
+  public onDeleteUser(): void {
+    this.deleteUser.emit(this.user.id);  // Передача id пользователя для удаления
   }
 
-  readonly dialog = inject(MatDialog);
-
+  // Открытие диалога для редактирования пользователя
   openDialog(): void {
     const dialogRef = this.dialog.open(CreateEditUserComponent, {
       data: this.user
@@ -28,7 +30,7 @@ export class UserCardComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.editUser.emit(result)
+        this.editUser.emit(result);  // Эмитируем отредактированного пользователя
       }
     });
   }
