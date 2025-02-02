@@ -2,13 +2,13 @@ import { Component, inject } from "@angular/core";
 import { AsyncPipe, NgFor } from "@angular/common";
 import { MatDialog } from "@angular/material/dialog";
 import { TodosApiService } from "../services/todos-api.service";
-import { TodosService } from "../services/todos.service";
 import { Todo } from "../models/todos.model";
 import { TodoCardComponent } from "./todo-card/todo-card.component";
 import { CreateEditTodoComponent } from "./create-edit-todo/create-edit-todo.component";
-import { UsersService } from "../services/users.service";
-import { User } from "../models/user.interface";
-import { UsersApiService } from "../services/users-api.service";
+import { Store } from "@ngrx/store";
+import { selectTodos } from "./store/todos.selectors";
+import { tap } from "rxjs";
+import { TodosActions } from "./store/todos.actions";
 
 @Component({
   selector: 'app-todos',
@@ -19,31 +19,24 @@ import { UsersApiService } from "../services/users-api.service";
 })
 
 export class TodosComponent {
-  private usersApiService = inject(UsersApiService);
   private todosApiService = inject(TodosApiService);
-  private todosService = inject(TodosService);
-  private usersService = inject(UsersService);
-  public readonly todos$ = this.todosService.todos$;
-  public readonly users$ = this.usersService.users$;
-
-  constructor() {
-    this.todosApiService.getTodos().subscribe((response: Todo[]) => {
-      this.todosService.setTodos(response);
-    });
-
-    if (!this.users$) {
-      this.usersApiService.getUsers().subscribe((response: User[]) => {
-        this.usersService.setUsers(response);
-      });
-    }
-  }
+  private store = inject(Store);
+  public readonly todos$ = this.store.select(selectTodos).pipe(
+    tap((todos) => {
+      if (!todos.length) {
+        this.todosApiService.getTodos().subscribe((response: Todo[]) => {
+          this.store.dispatch(TodosActions.set({todos: response}));
+        });
+      }
+    })
+  );
 
   public onEditTodo(editedTodo: Todo) {
-    this.todosService.editeTodo(editedTodo)
+    this.store.dispatch(TodosActions.edit({todo: editedTodo}));
   }
 
   public onDeleteTodo(id: number) {
-    this.todosService.deleteTodo(id);
+    this.store.dispatch(TodosActions.delete({id: id}));
   }
 
   private readonly dialog = inject(MatDialog)
@@ -55,7 +48,7 @@ export class TodosComponent {
   
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.todosService.createTodo(result);
+          this.store.dispatch(TodosActions.create({todo: result}));
         }
       });
     }
