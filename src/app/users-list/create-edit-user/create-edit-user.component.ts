@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from "@angular/core";
 import { User } from "../../models/user.interface";
-import { MAT_DIALOG_DATA, MatDialogClose, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 
 @Component({
@@ -8,7 +8,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angula
   templateUrl: './create-edit-user.component.html',
   styleUrls: ['./create-edit-user.component.scss'],
   standalone: true,
-  imports: [ReactiveFormsModule, MatDialogClose]
+  imports: [ReactiveFormsModule]
 })
 export class CreateEditUserComponent implements OnInit {
   public readonly data: User = inject(MAT_DIALOG_DATA);

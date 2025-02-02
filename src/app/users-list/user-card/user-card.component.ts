@@ -12,17 +12,16 @@ import { CreateEditUserComponent } from "../create-edit-user/create-edit-user.co
 
 export class UserCardComponent {
   @Input() user: User;
-  @Output() deleteUser = new EventEmitter<number>();  // Типизация события
-  @Output() editUser = new EventEmitter<User>();  // Типизация события
+  @Output() deleteUser = new EventEmitter<number>();
+  @Output() editUser = new EventEmitter<User>();
 
-  readonly dialog = inject(MatDialog);  // Инициализация MatDialog через inject
+  readonly dialog = inject(MatDialog);
 
-  // Обработчик для удаления пользователя
+
   public onDeleteUser(): void {
-    this.deleteUser.emit(this.user.id);  // Передача id пользователя для удаления
+    this.deleteUser.emit(this.user.id);
   }
 
-  // Открытие диалога для редактирования пользователя
   openDialog(): void {
     const dialogRef = this.dialog.open(CreateEditUserComponent, {
       data: this.user
@@ -30,7 +29,7 @@ export class UserCardComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.editUser.emit(result);  // Эмитируем отредактированного пользователя
+        this.editUser.emit(result);
       }
     });
   }
