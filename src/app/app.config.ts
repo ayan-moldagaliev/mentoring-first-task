@@ -7,6 +7,8 @@ import { userReducers } from './users-list/store/users.reducers';
 import { todosReducer } from './todos/store/todos.reducers';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { localStorageSync } from 'ngrx-store-localstorage';
+import { provideEffects } from '@ngrx/effects';
+import { UsersEffects } from './users-list/store/users.effects';
 
 export function localStorageSyncReducer(reducer: any) {
   return localStorageSync({ keys: ['users', 'todos'], rehydrate: true })(reducer);
@@ -19,8 +21,10 @@ export const appConfig: ApplicationConfig = {
     provideStore({
         users: userReducers,
         todos: todosReducer,
-    },
-    { metaReducers: [localStorageSyncReducer] },),
+      },
+      { metaReducers: [localStorageSyncReducer] },
+    ),
+    provideEffects(UsersEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
 ]
 };

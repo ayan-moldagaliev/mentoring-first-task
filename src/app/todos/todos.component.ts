@@ -1,12 +1,11 @@
 import { Component, inject } from "@angular/core";
 import { AsyncPipe, NgFor } from "@angular/common";
 import { MatDialog } from "@angular/material/dialog";
-import { TodosApiService } from "../services/todos-api.service";
 import { Todo } from "../models/todos.model";
 import { TodoCardComponent } from "./todo-card/todo-card.component";
 import { CreateEditTodoComponent } from "./create-edit-todo/create-edit-todo.component";
 import { Store } from "@ngrx/store";
-import { selectTodos } from "./store/todos.selectors";
+import { selectError, selectTodos } from "./store/todos.selectors";
 import { tap } from "rxjs";
 import { TodosActions } from "./store/todos.actions";
 
@@ -19,14 +18,12 @@ import { TodosActions } from "./store/todos.actions";
 })
 
 export class TodosComponent {
-  private todosApiService = inject(TodosApiService);
   private store = inject(Store);
+  public readonly error$ = this.store.select(selectError);
   public readonly todos$ = this.store.select(selectTodos).pipe(
     tap((todos) => {
       if (!todos.length) {
-        this.todosApiService.getTodos().subscribe((response: Todo[]) => {
-          this.store.dispatch(TodosActions.set({todos: response}));
-        });
+        this.store.dispatch({type: '[Todos Page] Load Todos'})
       }
     })
   );

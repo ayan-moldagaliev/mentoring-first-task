@@ -7,3 +7,8 @@ export const selectTodos = createSelector(
   selectTodosFeature,
   (state: TodoState) => state.todos,
 );
+
+export const selectError = createSelector(
+  selectTodosFeature,
+  (state: TodoState) => state.error,
+);

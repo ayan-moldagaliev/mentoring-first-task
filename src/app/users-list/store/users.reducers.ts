@@ -1,9 +1,10 @@
 import { createReducer, on } from "@ngrx/store";
 import { UserActions } from "./users.actions";
-import { User } from "../../models/user.interface";
+import { UserState } from "../../app.state";
 
-const initialState: {users: User[]} = {
+const initialState: UserState = {
   users: [],
+  error: null,
 };
 
 export const userReducers = createReducer(
@@ -11,6 +12,7 @@ export const userReducers = createReducer(
   on(UserActions.set, (state, payload) => ({
     ...state,
     users: payload.users,
+    error: null,
   })),
   on(UserActions.edit, (state, payload) => ({
     ...state,
@@ -27,5 +29,9 @@ export const userReducers = createReducer(
   on(UserActions.delete, (state, payload) => ({
     ...state,
     users: state.users.filter(user => user.id !== payload.id),
+  })),
+  on(UserActions.error, (state, payload) => ({
+    ...state,
+    error: payload.error,
   })),
 );

@@ -7,7 +7,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { CreateEditUserComponent } from "./create-edit-user/create-edit-user.component";
 import { Observable, tap } from "rxjs";
 import { Store } from "@ngrx/store";
-import { selectUsers } from "./store/users.selectors";
+import { selectError, selectUsers } from "./store/users.selectors";
 import { UserActions } from "./store/users.actions";
 
 @Component({
@@ -22,16 +22,16 @@ export class UsersListsComponent {
   private readonly dialog = inject(MatDialog);
   private store = inject(Store);
 
-  public users$: Observable<User[]> = this.store.select(selectUsers)
+  public readonly users$: Observable<User[]> = this.store.select(selectUsers)
   .pipe(
     tap((users) => {
       if (!users.length) {
-        this.usersApiService.getUsers().subscribe((response: User[]) => {
-          return this.store.dispatch(UserActions.set({users: response}));
-        });
+        this.store.dispatch({type: '[Users Page] Load Users'});
       }
     })
   );
+
+  public readonly error$ = this.store.select(selectError);
 
   public onEditUser(editedUser: User) {
     this.store.dispatch(UserActions.edit({user: editedUser}));

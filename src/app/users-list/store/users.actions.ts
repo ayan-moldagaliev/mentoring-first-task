@@ -8,5 +8,6 @@ export const UserActions = createActionGroup({
     'edit': props<{user: User}>(),
     'create': props<{user: User}>(),
     'delete': props<{id: number}>(),
+    'error': props<{error: string}>(),
   }
 })

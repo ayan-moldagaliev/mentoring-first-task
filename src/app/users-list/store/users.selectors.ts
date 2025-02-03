@@ -7,3 +7,8 @@ export const selectUsers = createSelector(
   selectUsersFeature,
   (state: UserState) => state.users,
 );
+
+export const selectError = createSelector(
+  selectUsersFeature,
+  (state: UserState) => state.error,
+);

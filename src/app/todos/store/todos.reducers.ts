@@ -1,9 +1,10 @@
 import { createReducer, on } from "@ngrx/store";
-import { Todo } from "../../models/todos.model";
 import { TodosActions } from "./todos.actions";
+import { TodoState } from "../../app.state";
 
-const initialState: {todos: Todo[]} = {
+const initialState: TodoState = {
   todos: [],
+  error: null,
 };
 
 export const todosReducer = createReducer(
@@ -11,6 +12,7 @@ export const todosReducer = createReducer(
   on(TodosActions.set, (state, payload) => ({
     ...state,
     todos: payload.todos,
+    error: null,
   })),
   on(TodosActions.edit, (state, payload) => ({
     ...state,
@@ -28,4 +30,8 @@ export const todosReducer = createReducer(
     ...state,
     todos: state.todos.filter(todo => todo.id !== payload.id),
   })),
+  on(TodosActions.error, (state, payload) => ({
+    ...state,
+    error: payload.error,
+  }))
 )
